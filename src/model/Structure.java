@@ -8,7 +8,7 @@ public class Structure {
 	public final static char RECURSIVE = 'R';
 
 	public ArrayList<Numbers>numbers;
-	public BinaryThree firstAbb;
+	public BinaryThree root;
 	public LinkedList first;
 	
 	public Structure() {
@@ -171,6 +171,86 @@ public class Structure {
 			}
 		}else {
 			//metodo recursivo
+		}
+	}
+	
+	public void addTreeIterative(long n) {
+		BinaryThree bt = new BinaryThree(n);
+		boolean add = false, rigth = false, left =false;
+		if (root == null) {
+			root = bt;
+		}else {
+			BinaryThree temp = root;
+			while(!add) {
+				if (bt.getNumber() > temp.getNumber()) {
+					if (temp.getRight() == null) {
+						add = true;
+						rigth = true;
+					}else {
+						temp = temp.getRight();
+					}
+				}else {
+					if (temp.getLeft() == null) {
+						add = true;
+						left = true;
+					}else {
+						temp = temp.getLeft();
+					}
+				}
+			}
+			if (left) {
+				temp.setLeft(bt);
+				bt.setUp(temp);
+			}else if (rigth) {
+				temp.setRight(bt);
+				bt.setUp(temp);
+			}
+		}
+	}
+	
+	public boolean searchTreeIterative(long n) {
+		boolean found = false;
+		BinaryThree temp = root;
+		
+		if (temp != null) {
+			while (!found) {
+				if (n > temp.getNumber()) {
+					if (temp.getRight() != null) {
+						temp = temp.getRight();
+					}
+				}else if (n < temp.getNumber()) {
+					if (temp.getLeft() != null) {
+						temp = temp.getLeft();
+					}
+				}else {
+					found = true;
+				}
+			}
+		}
+		return found;
+	}
+	
+	public void addBinaryTree(int n, char mode) {
+		long[] numeros = generateNumbers(n);
+		
+		if (mode == RECURSIVE) {
+			//metodo recursivo
+		}else {
+			for (int i = 0; i < numeros.length; i++) {
+				addTreeIterative(numeros[i]);
+			}
+		}
+	}
+	
+	public void searchBinaryTree(int n, char mode) {
+		long[] numeros = generateNumbers(n);
+		
+		if (mode == RECURSIVE) {
+			// metodo recursivo
+		}else {
+			for (int i = 0; i < numeros.length; i++) {
+				searchTreeIterative(numeros[i]);
+			}
 		}
 	}
 	

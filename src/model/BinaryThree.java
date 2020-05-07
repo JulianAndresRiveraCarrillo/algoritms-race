@@ -38,6 +38,14 @@ public class BinaryThree {
 	public void setLeft(BinaryThree left) {
 		this.left = left;
 	}
+
+	public BinaryThree getUp() {
+		return up;
+	}
+
+	public void setUp(BinaryThree up) {
+		this.up = up;
+	}
 	
 	
 }
