@@ -62,7 +62,6 @@ public class Structure {
 	}
 	
 	public void searchArrayList(int n, char mode) {
-		addArrayList(n);
 		long[] numeros = generateNumbers(n);
 		
 		if (mode == ITERATIVE ) {
@@ -75,7 +74,6 @@ public class Structure {
 	}
 	
 	public void removeArryList(int n, char mode) {
-		addArrayList(n);
 		long[] numeros = generateNumbers(n);
 		
 		if (mode == ITERATIVE) {
@@ -95,13 +93,48 @@ public class Structure {
 			first = lk;
 		}else {
 			LinkedList temp = first;
-			while (temp.getNext() == null) {
+			while (temp.getNext() != null) {
 				temp = temp.getNext();
 			}
 			lk = new LinkedList(n);
 			temp.setNext(lk);
 			lk.setPrev(temp);
 		}
+	}
+	
+	public boolean searchListIterative(long n) {
+		boolean found = false;
+		if (first != null) {
+			LinkedList temp = first;
+			while (temp.getNext() != null && !found) {
+				if (n == temp.getNumber()) {
+					found = true; 
+				}
+				temp = temp.getNext();
+			}
+			
+		}
+		return found; 
+	}
+	
+	public LinkedList removeListIterative(long n) {
+		LinkedList lk = null;
+		boolean removed = false;
+		if (first != null) {
+			LinkedList temp = first;
+			while (temp.getNext() != null && !removed) {
+				if (n == temp.getNumber()) {
+					LinkedList aux = temp.getPrev();
+					LinkedList aux2 = temp.getNext();
+					aux.setNext(aux2);
+					aux2.setPrev(aux);
+					temp.setNext(null);
+					temp.setPrev(null);
+				}
+				temp = temp.getNext();
+			}
+		}
+		return lk;
 	}
 	
 	public void addLinkedList(int n, char mode) {
@@ -111,6 +144,34 @@ public class Structure {
 			for (int i = 0; i < numeros.length; i++) {
 				addListIterative(numeros[i]);
 			}
+		}else {
+			//metodo recursivo
 		}
 	}
+	
+	public void searchLinkedList(int n, char mode) {
+		long[] numeros = generateNumbers(n);
+		
+		if (mode == ITERATIVE) {
+			for (int i = 0; i < numeros.length; i++) {
+				searchListIterative(numeros[i]);
+			}
+		}else {
+			//metodo recursivo 
+		}
+			
+	}
+	
+	public void removeLinkedList(int n, char mode) {
+		long[] numeros = generateNumbers(n);
+		
+		if (mode == ITERATIVE) {
+			for (int i = 0; i < numeros.length; i++) {
+				removeArrayIterative(numeros[i]);
+			}
+		}else {
+			//metodo recursivo
+		}
+	}
+	
 }

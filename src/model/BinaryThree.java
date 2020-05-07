@@ -4,11 +4,13 @@ public class BinaryThree {
 
 	private long number;
 	
+	private BinaryThree up;
 	private BinaryThree right;
 	private BinaryThree left;
 	
 	public BinaryThree(long n) {
 		number = n;
+		up = null;
 		right = null;
 		left = null;
 	}
