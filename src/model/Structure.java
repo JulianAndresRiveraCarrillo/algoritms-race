@@ -8,7 +8,7 @@ public class Structure {
 	public final static char RECURSIVE = 'R';
 
 	public ArrayList<Numbers>numbers;
-	public BinaryThree root;
+	public BinaryTree root;
 	public LinkedList first;
 	
 	public Structure() {
@@ -175,12 +175,12 @@ public class Structure {
 	}
 	
 	public void addTreeIterative(long n) {
-		BinaryThree bt = new BinaryThree(n);
+		BinaryTree bt = new BinaryTree(n);
 		boolean add = false, rigth = false, left =false;
 		if (root == null) {
 			root = bt;
 		}else {
-			BinaryThree temp = root;
+			BinaryTree temp = root;
 			while(!add) {
 				if (bt.getNumber() > temp.getNumber()) {
 					if (temp.getRight() == null) {
@@ -210,7 +210,7 @@ public class Structure {
 	
 	public boolean searchTreeIterative(long n) {
 		boolean found = false;
-		BinaryThree temp = root;
+		BinaryTree temp = root;
 		
 		if (temp != null) {
 			while (!found) {
@@ -228,6 +228,57 @@ public class Structure {
 			}
 		}
 		return found;
+	}
+	
+	public BinaryTree removeTreeIterative(long n) {
+		BinaryTree bt = null;
+		boolean removed = false;
+		BinaryTree temp = root;
+		
+		if (temp != null) {
+			while(!removed) {
+				if (n == temp.getNumber()) {
+					if (temp.getLeft() != null && temp.getRight() != null) {
+						BinaryTree aux = temp.getLeft();
+						boolean min = false;
+						while (!min) {
+							if (aux.getRight() != null) {
+								aux = aux.getRight();
+							}else {
+								min = true;
+							}
+						}
+						temp.setNumber(aux.getNumber());
+						if (aux.getLeft() != null) {
+							BinaryTree aux2 = aux.getLeft();
+							aux2.setUp(aux.getUp());
+							aux.getUp().setRight(aux);
+						}
+					}else if (temp.getLeft() != null && temp.getRight() == null) {
+						BinaryTree aux = temp.getLeft();
+						aux.setUp(temp.getUp());
+						temp.getUp().setLeft(aux);
+					}else if (temp.getRight() != null && temp.getLeft() == null) {
+						BinaryTree aux = temp.getRight();
+						aux.setUp(temp.getUp());
+						temp.getUp().setRight(aux);
+					}else {
+						BinaryTree aux = temp.getUp();
+						if (temp.equals(aux.getLeft())) {
+							aux.setLeft(null);
+							temp.setUp(null);
+						}else if (temp.equals(aux.getRight())) {
+							aux.setRight(null);
+							temp.setUp(null);
+						}else {
+							temp = null;
+						}
+					}
+				}
+			}
+		}
+		
+		return bt;
 	}
 	
 	public void addBinaryTree(int n, char mode) {
@@ -254,4 +305,15 @@ public class Structure {
 		}
 	}
 	
+	public void removeBinaryTree(int n, char mode) {
+		long[] numeros = generateNumbers(n);
+		
+		if (mode == RECURSIVE) {
+			//metodo recursivo
+		}else {
+			for (int i = 0; i < numeros.length; i++) {
+				removeTreeIterative(numeros[i]);
+			}
+		}
+	}
 }
