@@ -2,6 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
+import javax.swing.plaf.multi.MultiButtonUI;
+
 public class Structure {
 	
 	public final static char ITERATIVE = 'I';
@@ -49,6 +51,16 @@ public class Structure {
 		return found;
 	}
 	
+	public boolean searchArrayRecursive(long n, int pos) {
+		boolean found = false;
+		
+		if (n == numbers.get(pos).getNumber()) {
+			return found;
+		}else {
+			return searchArrayRecursive(n, pos-1);
+		}
+	}
+	
 	public Numbers removeArrayIterative(long n) {
 		Numbers temp = null;
 		
@@ -61,6 +73,17 @@ public class Structure {
 		return temp;
 	}
 	
+	public Numbers removeArrayRecursive(long n, int pos) {
+		Numbers temp = null;
+		
+		if (n == numbers.get(pos).getNumber()) {
+			temp = numbers.get(pos);
+			numbers.remove(pos);
+			return temp;
+		}else {
+			return removeArrayRecursive(n, pos-1);
+		}
+	}
 	public void searchArrayList(int n, char mode) {
 		long[] numeros = generateNumbers(n);
 		
@@ -69,7 +92,10 @@ public class Structure {
 				SearchArrayIterative(numeros[i]);
 			}
 		}else {
-			//metodo recursivo
+			int pos = numbers.size()-1;
+			for (int i = 0; i < numeros.length; i++) {
+				searchArrayRecursive(numeros[i], pos);
+			}
 		}
 	}
 	
@@ -81,7 +107,10 @@ public class Structure {
 				removeArrayIterative(numeros[i]);
 			}
 		}else {
-			//metodo recursivo
+			int pos = numbers.size()-1;
+			for (int i = 0; i < numeros.length; i++) {
+				removeArrayRecursive(n, pos);
+			}
 		}
 	}
 	
@@ -102,6 +131,23 @@ public class Structure {
 		}
 	}
 	
+	public void addListRecursive(long n, LinkedList temp) {
+		LinkedList lk = new LinkedList(n);
+		
+		if (first == null) {
+			first = lk;
+		}else {
+			if (temp.getNext() == null) {
+				temp.setNext(lk);
+				lk.setPrev(temp);
+			
+			}else {
+				temp = temp.getNext();
+				addListRecursive(n,temp);
+			}
+		}
+	}
+	
 	public boolean searchListIterative(long n) {
 		boolean found = false;
 		if (first != null) {
@@ -117,6 +163,17 @@ public class Structure {
 		return found; 
 	}
 	
+	public boolean searchListRecursive(long n, LinkedList temp) {
+		boolean found = false;
+			if (temp.getNumber() == n && temp != null) {
+				found = true;
+				return found;
+			}else {
+				temp = temp.getNext();
+				return searchListRecursive(n, temp);
+				
+			}
+	}
 	public LinkedList removeListIterative(long n) {
 		LinkedList lk = null;
 		boolean removed = false;
@@ -124,8 +181,10 @@ public class Structure {
 			LinkedList temp = first;
 			while (temp.getNext() != null && !removed) {
 				if (n == temp.getNumber()) {
+					lk = temp;
 					LinkedList aux = temp.getPrev();
 					LinkedList aux2 = temp.getNext();
+					
 					aux.setNext(aux2);
 					aux2.setPrev(aux);
 					temp.setNext(null);
@@ -137,6 +196,27 @@ public class Structure {
 		return lk;
 	}
 	
+	public LinkedList removeListRecursive(long n, LinkedList temp) {
+		LinkedList lk = null;
+		
+		if (temp != null && temp.getNumber() == n) {
+			
+			temp = lk;
+			LinkedList aux = temp.getPrev();
+			LinkedList aux2 = temp.getNext();
+			
+			aux.setNext(aux2);
+			aux2.setPrev(aux);
+			temp.setNext(null);
+			temp.setPrev(null);
+			
+			return lk; 
+		}else {
+			temp = temp.getNext();
+			return removeListRecursive(n, temp);
+		}
+	}
+	
 	public void addLinkedList(int n, char mode) {
 		long[] numeros = generateNumbers(n);
 		
@@ -145,7 +225,9 @@ public class Structure {
 				addListIterative(numeros[i]);
 			}
 		}else {
-			//metodo recursivo
+			for (int i = 0; i < numeros.length; i++) {
+				addListRecursive(numeros[i], first);
+			}
 		}
 	}
 	
@@ -157,7 +239,9 @@ public class Structure {
 				searchListIterative(numeros[i]);
 			}
 		}else {
-			//metodo recursivo 
+			for (int i = 0; i < numeros.length; i++) {
+				searchListRecursive(numeros[n], first);
+			}
 		}
 			
 	}
@@ -170,7 +254,9 @@ public class Structure {
 				removeArrayIterative(numeros[i]);
 			}
 		}else {
-			//metodo recursivo
+			for (int i = 0; i < numeros.length; i++) {
+				removeListRecursive(n, first);
+			}
 		}
 	}
 	
@@ -208,6 +294,31 @@ public class Structure {
 		}
 	}
 	
+	
+	public void addTreeRecursive(long n, BinaryTree temp) {
+		BinaryTree bt = new BinaryTree(n);
+		
+		if (temp == null) {
+			temp = bt;
+		}else {
+			if (temp.getNumber() <= bt.getNumber()) {
+				if (temp.getLeft() == null) {
+					temp.setLeft(bt);
+					bt.setUp(temp);
+				}else {
+					addTreeRecursive(n,temp.getLeft());
+				}
+			}else {
+				if (temp.getRight() == null) {
+					temp.setRight(bt);
+					bt.setUp(temp);
+				}else {
+					addTreeRecursive(n, temp.getRight());
+				}
+			}
+		}
+	}
+	
 	public boolean searchTreeIterative(long n) {
 		boolean found = false;
 		BinaryTree temp = root;
@@ -228,6 +339,19 @@ public class Structure {
 			}
 		}
 		return found;
+	}
+	
+	public boolean searchTreeRecursive(long n , BinaryTree temp) {
+		
+		if (temp != null) {
+			if (temp.getNumber() == n) {
+				return true; 
+			}else if (temp.getNumber() < n) {
+					return searchTreeRecursive(n, temp.getLeft());
+			}else {
+				return searchTreeRecursive(n, temp.getRight());
+			}
+		}
 	}
 	
 	public BinaryTree removeTreeIterative(long n) {
@@ -285,7 +409,9 @@ public class Structure {
 		long[] numeros = generateNumbers(n);
 		
 		if (mode == RECURSIVE) {
-			//metodo recursivo
+			for (int i = 0; i < numeros.length; i++) {
+				addTreeRecursive(numeros[i], root);
+			}
 		}else {
 			for (int i = 0; i < numeros.length; i++) {
 				addTreeIterative(numeros[i]);
@@ -297,7 +423,9 @@ public class Structure {
 		long[] numeros = generateNumbers(n);
 		
 		if (mode == RECURSIVE) {
-			// metodo recursivo
+			for (int i = 0; i < numeros.length; i++) {
+				searchTreeRecursive(numeros[i], root);
+			}
 		}else {
 			for (int i = 0; i < numeros.length; i++) {
 				searchTreeIterative(numeros[i]);
