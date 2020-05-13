@@ -3,8 +3,6 @@ package ui;
 import java.io.IOException;
 import java.util.Optional;
 
-import javax.swing.JOptionPane;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,34 +12,84 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
+import model.Structure;
 
 public class RaceControllerGUI {
 
-	
+	private Structure st;
 	public RaceControllerGUI() {
-		// TODO Auto-generated constructor stub
+		st = new Structure();
 	}
-	
-	 @FXML
-	    private BorderPane principal;
-	@FXML
+
+    @FXML
+    private BorderPane principal;
+
+    @FXML
+    private TextField input;
+
+    @FXML
+    private Label timeKeeper;
+
+    @FXML
     private ImageView image1;
+
+    @FXML
+    private Label timeArrayList;
 
     @FXML
     private ImageView image2;
 
     @FXML
+    private Label TimeLinkedList;
+
+    @FXML
     private ImageView image3;
 
     @FXML
-    void run(ActionEvent event) throws IOException {
+    private Label timeABB;
+
+    @FXML
+    private RadioButton add;
+
+    @FXML
+    private ToggleGroup algorithms;
+
+    @FXML
+    private RadioButton search;
+
+    @FXML
+    private RadioButton delete;
+
+    @FXML
+    private RadioButton iterative;
+
+    @FXML
+    private ToggleGroup mode;
+
+    @FXML
+    private RadioButton recursive;
+
+    @FXML
+    void run(ActionEvent event) {
     	
     }
-
+    
+    public void initialize() {
+    	add.setToggleGroup(algorithms);
+    	search.setToggleGroup(algorithms);
+    	delete.setToggleGroup(algorithms);
+    	
+    	iterative.setToggleGroup(mode);
+    	recursive.setToggleGroup(mode);
+    }
+    
     public Scene showImages() throws IOException {
     	FXMLLoader fxml = new FXMLLoader(getClass().getResource("Images.fxml"));
     	fxml.setController(this);
@@ -102,11 +150,13 @@ public class RaceControllerGUI {
     	    number = 3;
     	} else if (result.get() == buttonTypeFour) {
 			number = 4;
-		}else {
-    	    
     	}
     	
     	return number;
     }
     
+  
+    public void Chrono(boolean run) {
+    	
+    }
 }
