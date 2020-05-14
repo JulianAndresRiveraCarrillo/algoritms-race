@@ -2,10 +2,12 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -14,7 +16,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="principal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #e6e6fa;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="principal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="415.0" prefWidth="625.0" style="-fx-background-color: #e6e6fa;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <HBox alignment="CENTER" prefHeight="52.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -23,14 +25,15 @@
                   <Font name="Georgia Bold" size="36.0" />
                </font>
             </Label>
-            <TextField />
+            <TextField fx:id="input" />
          </children>
       </HBox>
    </top>
    <bottom>
       <HBox alignment="CENTER" prefHeight="39.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="CENTER" prefHeight="47.0" prefWidth="277.0">
+            <Canvas fx:id="canva" height="80.0" width="80.0" />
+            <VBox alignment="CENTER" prefHeight="73.0" prefWidth="159.0">
                <children>
                   <Label text="TimeKeeper" textFill="DARKGREEN">
                      <font>
@@ -38,14 +41,19 @@
                      </font>
                   </Label>
                   <Pane prefHeight="12.0" prefWidth="277.0" />
-                  <Label layoutX="10.0" layoutY="10.0" text="00:00:00" textFill="DARKOLIVEGREEN">
+                  <Label fx:id="timeKeeper" layoutX="10.0" layoutY="10.0" text="00:00:00" textFill="DARKOLIVEGREEN">
                      <font>
                         <Font name="Yu Gothic Medium" size="36.0" />
                      </font>
                   </Label>
                </children>
             </VBox>
-            <Circle fill="#0b79e000" radius="36.0" stroke="BLACK" strokeType="INSIDE" />
+            <Pane prefHeight="80.0" prefWidth="92.0">
+               <children>
+                  <Circle fill="#ffffff00" layoutX="78.0" layoutY="40.0" radius="50.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Circle fill="#ffffff00" layoutX="78.0" layoutY="40.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" />
+               </children>
+            </Pane>
          </children>
       </HBox>
    </bottom>
@@ -62,7 +70,7 @@
                               <Font name="Comic Sans MS Bold Italic" size="22.0" />
                            </font>
                         </Label>
-                        <Label layoutX="52.0" layoutY="166.0" text="00:00:00" textFill="DEEPSKYBLUE">
+                        <Label fx:id="timeArrayList" layoutX="52.0" layoutY="166.0" text="00:00:00" textFill="DEEPSKYBLUE">
                            <font>
                               <Font name="Comic Sans MS Bold Italic" size="22.0" />
                            </font>
@@ -72,12 +80,12 @@
                   <VBox alignment="CENTER" prefHeight="173.0" prefWidth="145.0">
                      <children>
                         <ImageView fx:id="image2" fitHeight="85.0" fitWidth="111.0" pickOnBounds="true" preserveRatio="true" />
-                        <Label text="ArrayList">
+                        <Label text="LinkedList">
                            <font>
                               <Font name="Comic Sans MS Bold Italic" size="22.0" />
                            </font>
                         </Label>
-                        <Label text="00:00:00" textFill="DEEPSKYBLUE">
+                        <Label fx:id="TimeLinkedList" text="00:00:00" textFill="DEEPSKYBLUE">
                            <font>
                               <Font name="Comic Sans MS Bold Italic" size="22.0" />
                            </font>
@@ -87,12 +95,12 @@
                   <VBox alignment="CENTER" prefHeight="173.0" prefWidth="136.0">
                      <children>
                         <ImageView fx:id="image3" fitHeight="85.0" fitWidth="111.0" pickOnBounds="true" preserveRatio="true" />
-                        <Label text="ArrayList">
+                        <Label text="ABB">
                            <font>
                               <Font name="Comic Sans MS Bold Italic" size="22.0" />
                            </font>
                         </Label>
-                        <Label text="00:00:00" textFill="DEEPSKYBLUE">
+                        <Label fx:id="timeABB" text="00:00:00" textFill="DEEPSKYBLUE">
                            <font>
                               <Font name="Comic Sans MS Bold Italic" size="22.0" />
                            </font>
@@ -121,19 +129,22 @@
                </font>
             </Label>
             <Pane prefHeight="11.0" prefWidth="106.0" />
-            <RadioButton mnemonicParsing="false" text="Add" VBox.vgrow="ALWAYS">
+            <RadioButton fx:id="add" mnemonicParsing="false" text="Add" VBox.vgrow="ALWAYS">
                <font>
                   <Font name="Comic Sans MS Bold Italic" size="18.0" />
                </font>
+               <toggleGroup>
+                  <ToggleGroup fx:id="algorithms" />
+               </toggleGroup>
             </RadioButton>
             <Pane layoutX="10.0" layoutY="89.0" prefHeight="11.0" prefWidth="106.0" />
-            <RadioButton layoutX="10.0" layoutY="27.0" mnemonicParsing="false" text="Search" VBox.vgrow="ALWAYS">
+            <RadioButton fx:id="search" layoutX="10.0" layoutY="27.0" mnemonicParsing="false" text="Search" toggleGroup="$algorithms" VBox.vgrow="ALWAYS">
                <font>
                   <Font name="Comic Sans MS Bold Italic" size="18.0" />
                </font>
             </RadioButton>
             <Pane layoutX="10.0" layoutY="119.0" prefHeight="11.0" prefWidth="106.0" />
-            <RadioButton layoutX="10.0" layoutY="44.0" mnemonicParsing="false" text="Delete" VBox.vgrow="ALWAYS">
+            <RadioButton fx:id="delete" layoutX="10.0" layoutY="44.0" mnemonicParsing="false" text="Delete" toggleGroup="$algorithms" VBox.vgrow="ALWAYS">
                <font>
                   <Font name="Comic Sans MS Bold Italic" size="18.0" />
                </font>
@@ -150,12 +161,15 @@
                </font>
             </Label>
             <Pane prefHeight="11.0" prefWidth="106.0" />
-            <RadioButton mnemonicParsing="false" text="Iterative" VBox.vgrow="ALWAYS">
+            <RadioButton fx:id="iterative" mnemonicParsing="false" text="Iterative" VBox.vgrow="ALWAYS">
                <font>
                   <Font name="Comic Sans MS Bold Italic" size="18.0" />
                </font>
+               <toggleGroup>
+                  <ToggleGroup fx:id="mode" />
+               </toggleGroup>
             </RadioButton>
-            <RadioButton mnemonicParsing="false" text="Recursive" VBox.vgrow="ALWAYS">
+            <RadioButton fx:id="recursive" mnemonicParsing="false" text="Recursive" toggleGroup="$mode" VBox.vgrow="ALWAYS">
                <font>
                   <Font name="Comic Sans MS Bold Italic" size="18.0" />
                </font>
@@ -168,6 +182,6 @@
       </VBox>
    </right>
    <padding>
-      <Insets bottom="30.0" left="10.0" right="10.0" top="30.0" />
+      <Insets bottom="20.0" left="10.0" right="10.0" top="30.0" />
    </padding>
 </BorderPane>

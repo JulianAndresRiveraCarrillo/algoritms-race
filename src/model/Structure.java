@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import javax.swing.plaf.multi.MultiButtonUI;
 
 public class Structure {
-	
-	public final static char ITERATIVE = 'I';
-	public final static char RECURSIVE = 'R';
 
 	public ArrayList<Numbers>numbers;
 	public BinaryTree root;
@@ -39,8 +36,13 @@ public class Structure {
 		}
 	}
 	
-	public boolean SearchArrayIterative(long[] n) {
+	public boolean SearchArrayIterative(int input) {
 		boolean found = false;
+		long[] n = generateNumbers(input);
+		
+		if (getNumbers() == null) {
+			addArrayList(input);
+		}
 		
 		for(int i = 0; i < n.length; i++) {
 			for (int j = 0; j < numbers.size() && !found; j++) {
@@ -56,7 +58,11 @@ public class Structure {
 		boolean found = false;
 		int i = 0;
 		
-		while (i < n.length) {
+		if (getNumbers() == null) {
+			addArrayList(n.length);
+		}
+		
+		while (i < n.length & pos >= 0) {
 			if (n[i] == numbers.get(pos).getNumber() ) {
 				found = true;
 				i = i + 1;
@@ -71,6 +77,11 @@ public class Structure {
 	public Numbers removeArrayIterative(long[] n) {
 		Numbers temp = null;
 		boolean removed = false;
+		
+		if (getNumbers() == null) {
+			addArrayList(n.length);
+		}
+		
 		for (int i = 0; i < n.length; i++) {
 			for (int j = 0; j < numbers.size() && !removed; j++) {
 				if (n[i] == numbers.get(j).getNumber()) {
@@ -87,7 +98,11 @@ public class Structure {
 		Numbers temp = null;
 		int i = 0;
 		
-		while (i < n.length) {
+		if (getNumbers() == null) {
+			addArrayList(n.length);
+		}
+		
+		while (i < n.length & pos >=0) {
 			if (n[i] == numbers.get(pos).getNumber()) {
 				temp = numbers.get(pos);
 				i = i+1;
@@ -104,6 +119,7 @@ public class Structure {
 	public void addListIterative(int input) {
 		LinkedList lk = null;
 		long[] n = generateNumbers(input);
+		
 		
 		for (int i = 0; i < n.length; i++) {
 			if (first == null) {
@@ -122,20 +138,30 @@ public class Structure {
 	
 	public void addListRecursive(long[] n, LinkedList temp) {
 		int i = 0;
-		
-		while (i < n.length) {
+		int n0 = n.length;
+		long[] n2 = new long[n.length-1];
+		int n00 = n2.length;
+		for (int j = 0; j < n2.length && n2.length >= 1; j++) {
+			if (n2.length == 1) {
+				n2[0] = n[0];
+			}
+			n2[i] = n[i];
+		}
+		while (i < n.length & n2.length >0) {
 			LinkedList lk = new LinkedList(n[i]);
 			
-			if (first == null) {
-				first = lk;
+			if (temp == null) {
+				temp = lk;
+				i++;
 			}else {
 				if (temp.getNext() == null) {
 					temp.setNext(lk);
 					lk.setPrev(temp);
+					i = i+1;
 				
 				}else {
 					temp = temp.getNext();
-					addListRecursive(n,temp);
+					addListRecursive(n2,temp);
 				}
 			}
 		}
@@ -143,7 +169,10 @@ public class Structure {
 	
 	public boolean searchListIterative(long[] n) {
 		boolean found = false;
-		if (first != null) {
+		
+		if (first == null) {
+			addListIterative(n.length);
+		}if(first != null){
 			LinkedList temp = first;
 			for (int i = 0; i < n.length; i++) {
 				while (temp.getNext() != null && !found) {
@@ -159,9 +188,10 @@ public class Structure {
 	
 	public boolean searchListRecursive(long[] n, LinkedList temp) {
 		boolean found = false;
-		
-		for (int i = 0; i < n.length; i++) {
-			if (temp != null) {
+		if (temp == null) {
+			addListRecursive(generateNumbers(n.length), temp);
+		}else {
+			for (int i = 0; i < n.length; i++) {
 				if (temp.getNumber() == n[i]) {
 					found = true;
 				}else {
@@ -175,8 +205,9 @@ public class Structure {
 	}
 	public LinkedList removeListIterative(long[] n) {
 		LinkedList lk = null;
-		
-		if (first != null) {
+		if(first == null) {
+			addListIterative(n.length);
+		}if (first != null) {
 			LinkedList temp = first;
 			for (int i = 0; i < n.length; i++) {
 				while (temp != null) {
@@ -201,30 +232,34 @@ public class Structure {
 		LinkedList lk = null;
 		int i = 0;
 		
-		while (i < n.length) {
-			if (temp != null && temp.getNumber() == n[i]) {
+		if (root == null) {
+			addListRecursive(generateNumbers(n.length), temp);
+		}
+		if(root != null) {
+			while (i < n.length) {
+				if (temp != null && temp.getNumber() == n[i]) {
+					
+					temp = lk;
+					LinkedList aux = temp.getPrev();
+					LinkedList aux2 = temp.getNext();
 				
-				temp = lk;
-				LinkedList aux = temp.getPrev();
-				LinkedList aux2 = temp.getNext();
+					aux.setNext(aux2);
+					aux2.setPrev(aux);
+					temp.setNext(null);
+					temp.setPrev(null);
 				
-				aux.setNext(aux2);
-				aux2.setPrev(aux);
-				temp.setNext(null);
-				temp.setPrev(null);
-				
-			}else {
-				temp = temp.getNext();
-				return removeListRecursive(n, temp);
+				}else {
+					temp = temp.getNext();
+					return removeListRecursive(n, temp);
+				}
 			}
 		}
-		
 		return lk;
 	}
 	
-	public void addTreeIterative(long[] n) {
+	public void addTreeIterative(int input) {
 		boolean add = false, rigth = false, left =false;
-		
+		long[] n = generateNumbers(input);
 		for (int i = 0; i < n.length; i++) {
 			BinaryTree bt = new BinaryTree(n[i]);
 			
@@ -267,21 +302,23 @@ public class Structure {
 			if (temp == null) {
 				temp = bt;
 			}else {
-				if (temp.getNumber() <= bt.getNumber()) {
+				if (bt.getNumber() <= temp.getNumber()) {
 					if (temp.getLeft() == null) {
 						temp.setLeft(bt);
 						bt.setUp(temp);
 					}else {
-						addTreeRecursive(n,temp.getLeft());
-					}
-				}else {
-					if (temp.getRight() == null) {
-						temp.setRight(bt);
-						bt.setUp(temp);
-					}else {
-						addTreeRecursive(n, temp.getRight());
+						temp = temp.getLeft();	
 					}
 				}
+				if (bt.getNumber() > temp.getNumber()) {
+						if (temp.getRight() == null) {
+					temp.setRight(bt);
+					bt.setUp(temp);
+					}
+				}else {
+					temp = temp.getRight();
+				}
+					addTreeRecursive(n,temp);
 			}
 		}
 	}
@@ -289,7 +326,10 @@ public class Structure {
 	public boolean searchTreeIterative(long[] n) {
 		boolean found = false;
 		BinaryTree temp = root;
-		if (temp != null) {
+		
+		if (temp == null) {
+			addTreeIterative(n.length);
+		}if (temp != null) {
 			for (int i = 0; i < n.length; i++) {
 				while (!found) {
 					if (n[i] > temp.getNumber()) {
@@ -311,13 +351,17 @@ public class Structure {
 	
 	public boolean searchTreeRecursive(long[] n , BinaryTree temp) {
 		boolean found = false;
-		for (int i = 0; i < n.length; i++) {
-			if (temp != null && temp.getNumber() == n[i]) {
-				found = true;
-			}else if (temp.getNumber() < n[i]) {
+		if (temp == null) {
+			addTreeRecursive(generateNumbers(n.length), temp);
+		}if(temp != null) {
+			for (int i = 0; i < n.length; i++) {
+				if (temp != null && temp.getNumber() == n[i]) {
+					found = true;
+				}else if (temp.getNumber() < n[i]) {
 					return searchTreeRecursive(n, temp.getLeft());
-			}else {
-				return searchTreeRecursive(n, temp.getRight());
+				}else {
+					return searchTreeRecursive(n, temp.getRight());
+				}
 			}
 		}
 		return found;
@@ -326,13 +370,16 @@ public class Structure {
 	public BinaryTree removeTreeIterative(long[]n) {
 		BinaryTree bt = null;
 		boolean removed = false;
-		BinaryTree temp = root;
-
-		if (root != null) {
-			for(int i = 0; i < n.length; i++){
+		BinaryTree temp = null;
+		
+		if(root == null) {
+			addTreeIterative(n.length);
+			temp = root;
+		}if (temp != null) {
+			for(int i = 1; i < n.length; i++){
 				while(!removed) {
 					if (n[i] == temp.getNumber()) {
-						if (temp.getLeft() != null && temp.getRight() != null) {
+						if (temp.getLeft() != null & temp.getRight() != null) {
 							BinaryTree aux = temp.getLeft();
 							boolean min = false;
 							while (!min) {
@@ -351,14 +398,14 @@ public class Structure {
 								aux.setLeft(null);
 								removed = true;
 							}
-						}else if (temp.getLeft() != null && temp.getRight() == null) {
+						}else if (temp.getLeft() != null & temp.getRight() == null) {
 							BinaryTree aux = temp.getLeft();
 							aux.setUp(temp.getUp());
 							temp.getUp().setLeft(aux);
 							temp.setUp(null);
 							temp.setLeft(null);
 							removed = true;
-						}else if (temp.getRight() != null && temp.getLeft() == null) {
+						}else if (temp.getRight() != null & temp.getLeft() == null) {
 							BinaryTree aux = temp.getRight();
 							aux.setUp(temp.getUp());
 							temp.getUp().setRight(aux);
@@ -381,10 +428,14 @@ public class Structure {
 					if (n[i] > temp.getNumber()) {
 						if (temp.getRight() != null) {
 							temp = temp.getRight();
+						}else {
+							removed = true;
 						}
-					}else {
+					}else if(n[i] <= temp.getNumber()){
 						if (temp.getLeft() != null) {
 							temp = temp.getLeft();
+						}else {
+							removed = true;
 						}
 					}
 				}
@@ -395,18 +446,24 @@ public class Structure {
 	
 	public BinaryTree removeTreeRecursive(long[] n, BinaryTree temp) {
 		BinaryTree aux = null;
-		for (int i = 0; i < n.length; i++) {
-			if (temp != null && (temp.getLeft() == null & temp.getRight() == null)) {
-				aux = removeCase1(temp, n[i]);
-			}else if (temp != null && (temp.getClass() != null & temp.getRight() == null)) {
-				aux =  removeCase2(temp, n[i]);
-			}else if (temp != null && (temp.getLeft() == null & temp.getRight() != null)) {
-				aux = removeCase2(temp, n[i]);
-			}else {
-				aux = removeCase3(temp, n[i]);
+		
+		if (temp == null) {
+			addTreeRecursive(generateNumbers(n.length), temp);
+		}
+		if (temp != null) {
+			for (int i = 0; i < n.length; i++) {
+				if (temp != null && (temp.getLeft() == null & temp.getRight() == null)) {
+					aux = removeCase1(temp, n[i]);
+				}else if (temp != null && (temp.getClass() != null & temp.getRight() == null)) {
+					aux =  removeCase2(temp, n[i]);
+				}else if (temp != null && (temp.getLeft() == null & temp.getRight() != null)) {
+					aux = removeCase2(temp, n[i]);
+				}else {
+					aux = removeCase3(temp, n[i]);
+				}
 			}
 		}
-		
+		return aux;
 	}
 	
 	public BinaryTree removeCase1(BinaryTree r, long n) {
@@ -473,6 +530,19 @@ public class Structure {
 		}else {
 			return returned = r;
 		}
+	}
+
+	
+	public ArrayList<Numbers> getNumbers() {
+		return numbers;
+	}
+
+	public BinaryTree getRoot() {
+		return root;
+	}
+
+	public LinkedList getFirst() {
+		return first;
 	}
 
 }

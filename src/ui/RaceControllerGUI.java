@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -19,15 +20,27 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.shape.Circle;
 import model.Structure;
+import thread.AlgoritmThread;
+import thread.ChronoThread;
+import thread.CircleThread;
 
 public class RaceControllerGUI {
 
+	int hour = 0;
+	int minute = 0;
+	int second = 0;
+	
+	private boolean started = true;
+	boolean running = false;
+	
 	private Structure st;
+	
 	public RaceControllerGUI() {
 		st = new Structure();
 	}
-
+	
     @FXML
     private BorderPane principal;
 
@@ -41,19 +54,19 @@ public class RaceControllerGUI {
     private ImageView image1;
 
     @FXML
-    private Label timeArrayList;
+	public Label timeArrayList;
 
     @FXML
     private ImageView image2;
 
     @FXML
-    private Label TimeLinkedList;
+	public Label TimeLinkedList;
 
     @FXML
     private ImageView image3;
 
     @FXML
-    private Label timeABB;
+	public Label timeABB;
 
     @FXML
     private RadioButton add;
@@ -77,9 +90,13 @@ public class RaceControllerGUI {
     private RadioButton recursive;
 
     @FXML
-    void run(ActionEvent event) {
-    	
-    }
+    private Circle BigCircle;
+
+    @FXML
+    private Circle SmallCircle;
+    
+    @FXML
+    private Canvas canva;
     
     public void initialize() {
     	add.setToggleGroup(algorithms);
@@ -88,7 +105,57 @@ public class RaceControllerGUI {
     	
     	iterative.setToggleGroup(mode);
     	recursive.setToggleGroup(mode);
+    	
+    	BigCircle = new Circle(50);
     }
+    
+    @FXML
+    void run(ActionEvent event) throws InterruptedException  {
+    	char m = iterative.isSelected()?'I':'R';
+    	char a = ' ';
+    	if (add.isSelected()) {
+			a = 'A';
+		}else if (search.isSelected()) {
+			a = 'S';
+		}else if (delete.isSelected()) {
+			a = 'D';
+		}
+    	int i = Integer.parseInt(input.getText());
+    	
+    	if (running == false) {
+			setStarted(true);
+			setRunning(true);
+			chronometer();
+			action(m, a, i);
+			//setRad(BigCircle);
+		}/*else if (running == true) {
+			setStarted(false);
+			setRunning(false);
+		}*/
+    }
+    
+    
+    private void chronometer() {
+		if (isStarted()) {
+			ChronoThread ct = new ChronoThread(st, this, timeKeeper);
+			ct.setDaemon(true);
+			ct.start();
+			
+			ChronoThread c1 = new ChronoThread(st, this, timeArrayList);
+			ChronoThread c2 = new ChronoThread(st, this, TimeLinkedList);
+			ChronoThread c3 = new ChronoThread(st, this, timeABB);
+			
+			c1.setDaemon(true);
+			c2.setDaemon(true);
+			c3.setDaemon(true);
+			
+			c1.start();
+			c2.start();
+			c3.start();
+		}
+	}
+
+
     
     public Scene showImages() throws IOException {
     	FXMLLoader fxml = new FXMLLoader(getClass().getResource("Images.fxml"));
@@ -154,9 +221,76 @@ public class RaceControllerGUI {
     	
     	return number;
     }
-    
-  
-    public void Chrono(boolean run) {
-    	
-    }
+
+	public boolean isStarted() {
+		return started;
+	}
+
+	public void setStarted(boolean started) {
+		this.started = started;
+	}
+
+	public int getHour() {
+		return hour;
+	}
+
+	public void setHour(int hour) {
+		this.hour = hour;
+	}
+
+	public int getMinute() {
+		return minute;
+	}
+
+	public void setMinute(int minute) {
+		this.minute = minute;
+	}
+
+	public int getSecond() {
+		return second;
+	}
+
+	public void setSecond(int second) {
+		this.second = second;
+	}
+
+	public boolean isRunning() {
+		return running;
+	}
+
+	public void setRunning(boolean running) {
+		this.running = running;
+	}
+	
+	public void action(char mode, char action, int input) throws InterruptedException {
+	//	AlgoritmThread at1 = new AlgoritmThread(st, this, mode, action, 1, input);
+//		AlgoritmThread at2 = new AlgoritmThread(st, this, mode, action, 2, input);
+		AlgoritmThread at3 = new AlgoritmThread(st, this, mode, action, 3, input);
+		
+		//at1.setDaemon(true);
+		//at1.setDaemon(true);
+		//at1.setDaemon(true);
+		
+		//at1.start();
+		//at2.start();
+		at3.start();
+		
+		
+	}
+	
+	private void setRad(Circle circle) {
+		if (circle.getRadius() == 50) {
+			for (int i = 5; i <= 40 & circle.getRadius() >= 10; i++) {
+				circle.setRadius(circle.getRadius() - i);
+			}
+		}if (circle.getRadius() == 10) {
+			for (int i = 5; i <= 40 & circle.getRadius() <= 50; i++) {
+				circle.setRadius(circle.getRadius() + i);
+			}
+		}
+	}
+	public void upgrade() {
+		setRad(BigCircle);
+	}
+	
 }
